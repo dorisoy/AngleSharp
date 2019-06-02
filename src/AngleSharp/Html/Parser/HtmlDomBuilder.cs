@@ -613,6 +613,10 @@ namespace AngleSharp.Html.Parser
                         {
                             Restart();
                         }
+                        catch (Exception ex)
+                        {
+                            _document.Context.ReportError(ex);
+                        }
 
                         return;
                     }

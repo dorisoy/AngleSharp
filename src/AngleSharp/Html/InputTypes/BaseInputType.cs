@@ -299,16 +299,19 @@ namespace AngleSharp.Html.InputTypes
         /// <summary>
         /// Checks if the string does not follow the pattern.
         /// </summary>
-        protected static Boolean IsInvalidPattern(String pattern, String value)
+        protected Boolean IsInvalidPattern(String pattern, String value)
         {
             if (!String.IsNullOrEmpty(pattern) && !String.IsNullOrEmpty(value))
             {
                 try
                 {
-                    var regex = new Regex(pattern, RegexOptions.ECMAScript | RegexOptions.CultureInvariant);
+                    var regex = pattern.AsEcmaScriptRegex();
                     return !regex.IsMatch(value);
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    _input.Owner?.Context.ReportError(ex);
+                }
             }
 
             return false;

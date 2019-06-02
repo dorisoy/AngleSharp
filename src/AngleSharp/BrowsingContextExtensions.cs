@@ -277,8 +277,36 @@ namespace AngleSharp
         public static void SetCookie(this IBrowsingContext context, Url url, String value)
         {
             var provider = context.GetProvider<ICookieProvider>();
-            provider?.SetCookie(url, value);
+
+            try
+            {
+                provider?.SetCookie(url, value);
+            }
+            catch (Exception ex)
+            {
+                context.ReportError(ex);
+            }
         }
+
+        #region Errors
+
+        /// <summary>
+        /// Reports the raised exception.
+        /// </summary>
+        /// <param name="context">The current context.</param>
+        /// <param name="ex">The emitted exception to report.</param>
+        public static void ReportError(this IBrowsingContext context, Exception ex) =>
+            context.GetProvider<IErrorHandler>()?.Report(ex);
+
+        /// <summary>
+        /// Cures the raised exception.
+        /// </summary>
+        /// <param name="context">The current context.</param>
+        /// <param name="ex">The emitted exception to handle.</param>
+        public static T CureError<T>(this IBrowsingContext context, Exception ex) where T : class =>
+            context.GetProvider<IErrorHandler>()?.Cure<T>(ex);
+
+        #endregion
 
         #endregion
 

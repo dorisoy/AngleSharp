@@ -162,7 +162,16 @@ namespace AngleSharp.Io
                     if (requester.SupportsProtocol(request.Address.Scheme))
                     {
                         _context.Fire(new RequestEvent(request, null));
-                        response = await requester.RequestAsync(request, cancel).ConfigureAwait(false);
+
+                        try
+                        {
+                            response = await requester.RequestAsync(request, cancel).ConfigureAwait(false);
+                        }
+                        catch (Exception ex)
+                        {
+                            response = _context.CureError<IResponse>(ex);
+                        }
+
                         _context.Fire(new RequestEvent(request, response));
                         break;
                     }

@@ -1,7 +1,6 @@
-﻿namespace AngleSharp.Html
+namespace AngleSharp.Html
 {
     using AngleSharp.Text;
-    using AngleSharp.Dom;
     using System;
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
@@ -12,22 +11,7 @@
     public sealed class SourceSet
     {
         private static readonly String FullWidth = "100vw";
-        private static readonly Regex SizeParser = CreateRegex();
-
-        private static Regex CreateRegex()
-        {
-            var regexString = @"(\([^)]+\))?\s*(.+)";
-
-            try
-            {
-                return new Regex(regexString, RegexOptions.ECMAScript | RegexOptions.CultureInvariant);
-            }
-            catch
-            {
-                // See issue #256
-                return new Regex(regexString, RegexOptions.ECMAScript);
-            }
-        }
+        private static readonly Regex SizeParser = @"(\([^)]+\))?\s*(.+)".AsEcmaScriptRegex();
 
         /// <summary>
         /// Parses the given srcset attribute into an enumeration of candidates.

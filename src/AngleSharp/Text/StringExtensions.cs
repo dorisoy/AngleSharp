@@ -11,6 +11,7 @@ namespace AngleSharp.Text
     using System.Reflection;
     using System.Runtime.CompilerServices;
     using System.Text;
+    using System.Text.RegularExpressions;
 
     /// <summary>
     /// Useful methods for string objects.
@@ -809,5 +810,23 @@ namespace AngleSharp.Text
             encType.Isi(MimeTypeNames.MultipartForm) ||
             encType.Isi(MimeTypeNames.ApplicationJson) ?
                 encType : MimeTypeNames.UrlencodedForm;
+
+        /// <summary>
+        /// Creates a new ECMAScript compliant regular expression parser.
+        /// </summary>
+        /// <param name="regexString">The regular expression.</param>
+        /// <returns>The Regex object.</returns>
+        public static Regex AsEcmaScriptRegex(this String regexString)
+        {
+            try
+            {
+                return new Regex(regexString, RegexOptions.ECMAScript | RegexOptions.CultureInvariant);
+            }
+            catch
+            {
+                // See issue #256
+                return new Regex(regexString, RegexOptions.ECMAScript);
+            }
+        }
     }
 }

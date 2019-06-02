@@ -377,7 +377,7 @@ namespace AngleSharp.Text
                 { "x-cp1257", Windows1257 },
                 { "cp1258", Windows1258 },
                 { "windows-1258", Windows1258 },
-                { "x-cp1258", Windows1258 }
+                { "x-cp1258", Windows1258 },
             };
 
             var macintosh = GetEncoding("macintosh");

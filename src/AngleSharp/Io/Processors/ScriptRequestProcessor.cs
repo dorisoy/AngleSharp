@@ -5,7 +5,6 @@ namespace AngleSharp.Io.Processors
     using AngleSharp.Scripting;
     using AngleSharp.Text;
     using System;
-    using System.Diagnostics;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -69,6 +68,7 @@ namespace AngleSharp.Io.Processors
         public async Task RunAsync(CancellationToken cancel)
         {
             var download = Download;
+            var context = _document.Context;
 
             if (download != null)
             {
@@ -76,8 +76,9 @@ namespace AngleSharp.Io.Processors
                 {
                     _response = await download.Task.ConfigureAwait(false);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    context.ReportError(ex);
                     await _document.QueueTaskAsync(FireErrorEvent).ConfigureAwait(false);
                 }
             }
@@ -98,7 +99,7 @@ namespace AngleSharp.Io.Processors
                     catch (Exception ex)
                     {
                         /* We omit failed 3rd party services */
-                        Debug.WriteLine(ex);
+                       context.ReportError(ex);
                     }
 
                     _document.Source.Index = insert;
